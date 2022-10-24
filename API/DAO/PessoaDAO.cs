@@ -4,34 +4,71 @@ using System.Linq;
 
 namespace API.DAO
 {
-    public class PessoaDAO
+    public static class PessoaDAO
     {
-        private List<Pessoa> Pessoas()
-        {
-            List<Pessoa> lista = new();
-            lista.Add(new Pessoa { Codigo = 1, Nome = "André Luis Pleti", Idade = 32 });
-            lista.Add(new Pessoa { Codigo = 2, Nome = "José Reynaldo", Idade = 24 });
-            lista.Add(new Pessoa { Codigo = 3, Nome = "Junior Martins", Idade = 9999 });
-            lista.Add(new Pessoa { Codigo = 4, Nome = "Edgard", Idade = 56 });
-            lista.Add(new Pessoa { Codigo = 5, Nome = "Felipe", Idade = 30 });
-            lista.Add(new Pessoa { Codigo = 6, Nome = "Luiz Gustavo", Idade = 30 });
-            lista.Add(new Pessoa { Codigo = 7, Nome = "Luiz Octávio", Idade = 48 });
-            lista.Add(new Pessoa { Codigo = 8, Nome = "Fabio Henrique", Idade = 13 });
+        public static List<Pessoa> Pessoas { get; set; } = new List<Pessoa>();
 
-            return lista;
-        }
-
-        public List<Pessoa> RetornaLista(string nome)
+        public static List<Pessoa> RetornaLista(string nome)
         {
             if (string.IsNullOrWhiteSpace(nome))
-                return Pessoas().ToList();
+                return Pessoas.ToList();
             else
-                return Pessoas().Where(x => x.Nome.ToUpper().Contains(nome.ToUpper())).ToList();
+                return Pessoas.Where(x => x.Nome.ToUpper().Contains(nome.ToUpper())).ToList();
         }
 
-        public Pessoa RetornaObjeto(int codigo)
+        public static Pessoa RetornaObjeto(int codigo)
         {
-            return Pessoas().Where(x => x.Codigo == codigo).FirstOrDefault();
+            Pessoa objeto = Pessoas.Where(x => x.Codigo == codigo).FirstOrDefault();
+
+            if (objeto == null)
+                objeto = new Pessoa();
+
+            return objeto;
+        }
+
+        public static bool Insere(Pessoa objeto)
+        {
+            int codigo = 0;
+
+            if (Pessoas.Any())
+                codigo = Pessoas.Max().Codigo + 1;
+            else
+                codigo = 1;
+
+            objeto.Codigo = codigo;
+
+            Pessoas.Add(objeto);
+
+            return true;
+        }
+
+        public static bool Atualiza(Pessoa objeto)
+        {
+            Pessoa objetoBanco = Pessoas.Where(x => x.Codigo == objeto.Codigo).FirstOrDefault();
+
+            if (objetoBanco != null)
+            {
+                objetoBanco.Nome = objeto.Nome;
+                objetoBanco.Idade = objeto.Idade;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool Deleta(int codigo)
+        {
+            Pessoa objetoBanco = Pessoas.Where(x => x.Codigo == codigo).FirstOrDefault();
+
+            if (objetoBanco != null)
+            {
+                Pessoas.Remove(objetoBanco);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
