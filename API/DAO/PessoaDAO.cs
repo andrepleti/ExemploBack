@@ -50,6 +50,8 @@ namespace API.DAO
             {
                 objetoBanco.Nome = objeto.Nome;
                 objetoBanco.Idade = objeto.Idade;
+                objetoBanco.Login = objeto.Login;
+                objetoBanco.Senha = objeto.Senha;
 
                 return true;
             }
@@ -69,6 +71,16 @@ namespace API.DAO
             }
 
             return false;
+        }
+
+        public static Pessoa Autentica(Pessoa objeto)
+        {
+            Pessoa objetoBanco = Pessoas.Where(x => x.Login == objeto.Login && x.Senha == objeto.Senha).FirstOrDefault();
+
+            if (objetoBanco == null)
+                objetoBanco = new Pessoa();
+
+            return objetoBanco;
         }
     }
 }

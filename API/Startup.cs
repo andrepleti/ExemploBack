@@ -1,8 +1,10 @@
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API
 {
@@ -22,6 +24,24 @@ namespace API
             services.AddControllers().AddJsonOptions(o =>
             {
                 o.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JWTService.AuthenticationScheme;
+                x.DefaultChallengeScheme = JWTService.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = JWTService.ValorFalso;
+                x.SaveToken = JWTService.ValorTrue;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = JWTService.ValorTrue,
+                    IssuerSigningKey = new SymmetricSecurityKey(JWTService.IssuerSigningKey),
+                    ValidateIssuer = JWTService.ValorFalso,
+                    ValidateAudience = JWTService.ValorFalso
+                };
             });
         }
 
