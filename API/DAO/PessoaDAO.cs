@@ -31,7 +31,7 @@ namespace API.DAO
             int codigo = 0;
 
             if (Pessoas.Any())
-                codigo = Pessoas.Max().Codigo + 1;
+                codigo = Pessoas.Count();
             else
                 codigo = 1;
 
