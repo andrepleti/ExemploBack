@@ -6,7 +6,13 @@ namespace API.DAO
 {
     public static class PessoaDAO
     {
-        public static List<Pessoa> Pessoas { get; set; } = new List<Pessoa>();
+        public static List<Pessoa> Pessoas { get; set; } = new List<Pessoa>() { new Pessoa { Codigo = 1, 
+                                                                                             Login = "admin", 
+                                                                                             Senha = "abc123", 
+                                                                                             Idade = 50, 
+                                                                                             Nome = "Administrador"
+                                                                                           }  
+                                                                              };
 
         public static List<Pessoa> RetornaLista(string nome)
         {
